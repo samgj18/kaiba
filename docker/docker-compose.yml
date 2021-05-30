@@ -1,0 +1,13 @@
+version: '3.2'
+
+services:
+  cassandra:
+    container_name: kaiba
+    image: cassandra:4.0
+    ports:
+      - "9042:9042"
+      - "9090:9090"
+    volumes:
+      - type: bind
+        source: ./cassandra-storage
+        target: /var/lib/cassandra
