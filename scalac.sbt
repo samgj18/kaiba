@@ -36,6 +36,9 @@ ThisBuild / wartremoverWarnings := {
     Warts.allBut(
       Wart.ImplicitConversion,
       Wart.ImplicitParameter,
+      // This Nothing and Any are temporary while solving some type issues in main class
+      Wart.Nothing,
+      Wart.Any,
     )
   else
     (ThisBuild / wartremoverWarnings).value

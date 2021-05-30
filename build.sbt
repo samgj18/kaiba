@@ -28,7 +28,11 @@ lazy val commonSettings = Seq(
 
 lazy val dependencies = Seq(
   libraryDependencies ++= Seq(
-    // main dependencies
+    "dev.zio"              %% "zio"                 % "1.0.5",
+    "io.d11"               %% "zhttp"               % "1.0.0.0-RC16",
+    "io.getquill"          %% "quill-cassandra-zio" % "3.7.0",
+    "com.github.jwt-scala" %% "jwt-json4s-native"   % "7.1.5",
+    "dev.zio"              %% "zio-json"            % "0.1.2",
   ),
   libraryDependencies ++= Seq(
     com.github.alexarchambault.`scalacheck-shapeless_1.15`,
