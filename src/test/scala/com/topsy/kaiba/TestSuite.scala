@@ -1,5 +1,4 @@
 package com.topsy.kaiba
-package kaiba
 
 import org.scalacheck.ScalacheckShapeless
 import org.scalatest._
