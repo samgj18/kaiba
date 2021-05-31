@@ -1,20 +1,16 @@
-package com.topsy.kaiba.http
+package com.topsy.kaiba.services
 
+import com.topsy.kaiba.utils.jwt.Tokenizer._
 import pdi.jwt.JwtClaim
 import zhttp.http.{ Method, _ }
 import zio._
-
-import com.topsy.kaiba.jwt.Tokenizer._
 
 final case class Authentication()
 object Authentication {
   val live: ULayer[Has[Authentication]] = ZLayer.succeed(Authentication())
 }
 
-private[http] object AuthenticationService {
-  val routes: Http[Has[Authentication], Nothing, Request, UResponse] =
-    login +++ authenticate(HttpApp.forbidden("Not allowed!"), user)
-
+object AuthenticationService {
   def authenticate[R, E](fail: HttpApp[R, E], success: JwtClaim => HttpApp[R, E]): HttpApp[R, E] = Http.flatten {
     Http
       .fromFunction[Request] {
