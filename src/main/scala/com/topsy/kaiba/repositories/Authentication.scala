@@ -1,10 +1,9 @@
-package com.topsy.kaiba.services
+package com.topsy.kaiba.repositories
+
+import pdi.jwt.JwtClaim
+import zio._
 
 import com.topsy.kaiba.models.User
-import pdi.jwt.JwtClaim
-import zhttp.http._
-import zio._
-import com.topsy.kaiba.utils.jwt.Tokenizer._
 
 object Authentication {
   // type alias to use for other layers
@@ -15,11 +14,11 @@ object Authentication {
     def getUser(token: JwtClaim): UIO[Option[User]]
   }
 
-  // layer; includes service implementation
+  // live; includes service implementation
   val live: ZLayer[Any, Throwable, AuthenticationEnv] = ZLayer.succeed(new Service {
-    // Go to the database and ask for the user
+    // TODO: Go to the database and ask for the user
     override def getUser(token: JwtClaim): UIO[Option[User]] =
-      ZIO.succeed(Option(new User(user(token), "dummy@dummy.co")))
+      ZIO.succeed(Option(new User(token.content, "Samuel", "dummy@dummy.co")))
   })
 
   // front-facing API, aka "accessor"

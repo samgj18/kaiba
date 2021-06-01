@@ -1,4 +1,4 @@
-package com.topsy.kaiba.services
+package com.topsy.kaiba.repositories
 
 import zio._
 
@@ -15,7 +15,7 @@ object Health {
   val live: ZLayer[Any, Throwable, HealthEnv] = ZLayer.succeed {
     new Service {
       override def ok: Task[String] = Task {
-        // Replace with email notification later
+        // TODO: Replace with email notification later
         "Server is up"
       }
     }
