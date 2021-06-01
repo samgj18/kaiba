@@ -1,4 +1,4 @@
-package com.topsy.kaiba.jwt
+package com.topsy.kaiba.utils.jwt
 
 import java.time.Clock
 
