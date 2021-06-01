@@ -1,8 +1,8 @@
 package com.topsy.kaiba.utils.jwt
 
-import pdi.jwt.{ Jwt, JwtAlgorithm, JwtClaim }
-
 import java.time.Clock
+
+import pdi.jwt._
 
 object Tokenizer {
   val SECRET_KEY: String    = "secretKey"
