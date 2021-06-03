@@ -3,13 +3,14 @@ package com.topsy.kaiba.http
 import pdi.jwt.JwtClaim
 import zhttp.http._
 import zio.json._
-
 import com.topsy.kaiba.models.User
-import com.topsy.kaiba.repositories.Authentication._
+import com.topsy.kaiba.repositories.Authentication
+import com.topsy.kaiba.repositories.Authentication.getUser
 import com.topsy.kaiba.utils.jwt.Tokenizer._
+import zio.Has
 
 object AuthenticationService {
-  def routes: Http[AuthenticationEnv, Throwable, Request, Response[AuthenticationEnv, Throwable]] =
+  def routes: Http[Has[Authentication], Nothing, Request, Response[Has[Authentication], Nothing]] =
     login +++ authenticate(HttpApp.forbidden("error.forbidden.request"), user)
 
   def login: UHttpApp = Http.collect[Request] {
@@ -28,7 +29,7 @@ object AuthenticationService {
         }
     }
 
-  def user(claim: JwtClaim): Http[AuthenticationEnv, Throwable, Request, UResponse] = Http.collectM[Request] {
+  def user(claim: JwtClaim): Http[Has[Authentication], Nothing, Request, UResponse] = Http.collectM[Request] {
     case Method.GET -> Root / "user" =>
       for {
         user <- getUser(claim)

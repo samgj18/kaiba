@@ -2,25 +2,20 @@ package com.topsy.kaiba.repositories
 
 import zio._
 
+trait Health {
+  def ok: UIO[String]
+}
+
 object Health {
-  // type alias, to use for other layers
-  type HealthEnv = Has[Health.Service]
+  def ok: ZIO[Has[Health], Nothing, String] = ZIO.serviceWith[Health](_.ok)
+}
 
-  // service definition
-  trait Service {
-    def ok: Task[String]
-  }
-
-  // layer - service implementation
-  val live: ZLayer[Any, Throwable, HealthEnv] = ZLayer.succeed {
-    new Service {
-      override def ok: Task[String] = Task {
+object HealthLive {
+  val layer: ULayer[Has[Health]] = ZLayer.succeed {
+    new Health {
+      override def ok: UIO[String] =
         // TODO: Replace with email notification later
-        "Server is up"
-      }
+        ZIO.effectTotal("Server is up")
     }
   }
-
-  // accessor
-  def ok: ZIO[HealthEnv, Throwable, String] = ZIO.accessM(_.get.ok)
 }
