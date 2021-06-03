@@ -18,7 +18,7 @@ final case class AuthenticationLive() extends Authentication {
 
 object AuthenticationLive {
   val layer: ULayer[Has[Authentication]] = {
-     ZLayer.succeed(Authentication)
+     ZLayer.succeed(AuthenticationLive())
   }
 }
 
