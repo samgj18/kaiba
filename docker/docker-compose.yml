@@ -1,13 +1,23 @@
 version: '3.2'
 
 services:
-  cassandra:
-    container_name: kaiba
-    image: cassandra:4.0
+  datastax-enterprise:
+    image: datastax/dse-server:6.8.13
+    hostname: datastax-enterprise
+    container_name: datastax-enterprise
+    environment:
+      DS_LICENSE: accept
     ports:
       - "9042:9042"
-      - "9090:9090"
     volumes:
-      - type: bind
-        source: ./cassandra-storage
-        target: /var/lib/cassandra
+      - ./cassandra-storage:/var/lib/cassandra
+
+  datastax-studio:
+    image: datastax/dse-studio
+    container_name: datastax-studio
+    ports:
+      - "9091:9091"
+    environment:
+      DS_LICENSE: accept
+    depends_on:
+      - datastax-enterprise
