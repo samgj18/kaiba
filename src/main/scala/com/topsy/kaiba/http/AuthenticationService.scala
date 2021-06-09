@@ -7,10 +7,11 @@ import com.topsy.kaiba.models.User
 import com.topsy.kaiba.repositories.Authentication
 import com.topsy.kaiba.repositories.Authentication.getUser
 import com.topsy.kaiba.utils.jwt.Tokenizer._
-import zio.Has
+import zio._
 
 object AuthenticationService {
-  def routes: Http[Has[Authentication], Nothing, Request, Response[Has[Authentication], Nothing]] =
+  def routes
+      : Http[Has[Authentication] with ZEnv, Throwable, Request, Response[Has[Authentication] with ZEnv, Throwable]] =
     login +++ authenticate(HttpApp.forbidden("error.forbidden.request"), user)
 
   def login: UHttpApp = Http.collect[Request] {
@@ -29,13 +30,11 @@ object AuthenticationService {
         }
     }
 
-  def user(claim: JwtClaim): Http[Has[Authentication], Nothing, Request, UResponse] = Http.collectM[Request] {
-    case Method.GET -> Root / "user" =>
-      for {
-        user <- getUser(claim)
-      } yield user match {
-        case Some(user: User) => Response.jsonString(user.toJsonPretty)
-        case _                => Response.text("User not found")
-      }
-  }
+  def user(claim: JwtClaim): Http[Has[Authentication] with ZEnv, Throwable, Request, UResponse] =
+    Http.collectM[Request] {
+      case Method.GET -> Root / "user" =>
+        for {
+          user <- getUser(claim)
+        } yield Response.jsonString(user.head.toJsonPretty)
+    }
 }

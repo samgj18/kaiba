@@ -1,19 +1,12 @@
 package com.topsy.kaiba.config
 
 import io.getquill.{ CassandraZioContext, _ }
-
-import com.topsy.kaiba.models.User
+import zio.{ Has, ZLayer }
+import zio.blocking.Blocking
 
 object Database {
-  object ZioPostgresContext extends CassandraZioContext(Literal)
-  import ZioPostgresContext._
+  object ZioCassandraContext extends CassandraZioContext(Literal)
 
-  def getUserQuery(id: String): ZioPostgresContext.Quoted[EntityQuery[User]] = quote {
-    query[User].filter(user => user.id == id)
-  }
-
-  def createUserQuery(user: User): ZioPostgresContext.Quoted[Insert[User]] = quote {
-    query[User].insert(user)
-  }
-
+  lazy val layer: ZLayer[Blocking, Throwable, Has[CassandraZioSession] with Has[Blocking.Service]] =
+    CassandraZioSession.fromPrefix("topsy_auth")
 }
