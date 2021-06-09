@@ -1,6 +1,6 @@
 package com.topsy.kaiba.repositories
 
-import com.topsy.kaiba.config.Database.ZioCassandraContext.{ query, quote, _ }
+import com.topsy.kaiba.config.Database.ZioCassandraContext._
 import com.topsy.kaiba.models.User
 import io.getquill.CassandraZioContext._
 import io.getquill.CassandraZioSession

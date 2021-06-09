@@ -17,10 +17,20 @@ Docker network.
 
 Create keyspace (houses tables) for local development:
 
-```cqlsh
+```cql
 CREATE KEYSPACE topsy_auth
 WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 1};
+
+USE topsy_auth;
+CREATE TABLE IF NOT EXISTS topsy_auth.user (
+    id text,
+    name text,
+    email text,
+    PRIMARY KEY (id)
+);
 ```
+
+### Examples
 
 Create table:
 

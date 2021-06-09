@@ -32,8 +32,9 @@ object AuthenticationService {
   def user(claim: JwtClaim): Http[Has[Authentication], Throwable, Request, UResponse] =
     Http.collectM[Request] {
       case Method.GET -> Root / "user" =>
-        for {
-          user <- getUser(claim)
-        } yield Response.jsonString(user.head.toJsonPretty)
+        getUser(claim).map {
+          case one :: Nil => Response.jsonString(one.toJson)
+          case _          => Response.HttpResponse(Status.NOT_FOUND, Nil, HttpData.Empty)
+        }
     }
 }
