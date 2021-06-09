@@ -34,6 +34,8 @@ ThisBuild / shouldLint :=
 ThisBuild / wartremoverWarnings := {
   if (shouldLint.value)
     Warts.allBut(
+      Wart.MutableDataStructures, // Quill's compiler makes use of Mutable Data Structures
+      Wart.JavaSerializable,      // Quill makes use of Serializable
       Wart.ImplicitConversion,
       Wart.ImplicitParameter,
       // This Nothing and Any are temporary while solving some type issues in main class
