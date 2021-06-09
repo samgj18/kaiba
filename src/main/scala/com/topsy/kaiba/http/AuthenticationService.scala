@@ -10,8 +10,7 @@ import com.topsy.kaiba.utils.jwt.Tokenizer._
 import zio._
 
 object AuthenticationService {
-  def routes
-      : Http[Has[Authentication] with ZEnv, Throwable, Request, Response[Has[Authentication] with ZEnv, Throwable]] =
+  def routes: Http[Has[Authentication], Throwable, Request, Response[Has[Authentication], Throwable]] =
     login +++ authenticate(HttpApp.forbidden("error.forbidden.request"), user)
 
   def login: UHttpApp = Http.collect[Request] {
@@ -30,7 +29,7 @@ object AuthenticationService {
         }
     }
 
-  def user(claim: JwtClaim): Http[Has[Authentication] with ZEnv, Throwable, Request, UResponse] =
+  def user(claim: JwtClaim): Http[Has[Authentication], Throwable, Request, UResponse] =
     Http.collectM[Request] {
       case Method.GET -> Root / "user" =>
         for {
