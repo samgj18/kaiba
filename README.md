@@ -6,17 +6,31 @@ Use docker-compose to spin up Cassandra and use the following to log into the Ca
 and get cqlsh running:
 
 ```sh
-docker exec -it topsy-auth cqlsh
+docker exec -it datastax-enterprise cqlsh
 ```
+
+You can also utilize DataStax Studio by visiting [localhost:9091](http://localhost:9091) for a better UI experience
+and creating a new connection to `datastax-enterprise` which is the DataStax Enterprise container running in the same
+Docker network.
 
 ### Data model
 
 Create keyspace (houses tables) for local development:
 
-```cqlsh
+```cql
 CREATE KEYSPACE topsy_auth
 WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 1};
+
+USE topsy_auth;
+CREATE TABLE IF NOT EXISTS topsy_auth.user (
+    id text,
+    name text,
+    email text,
+    PRIMARY KEY (id)
+);
 ```
+
+### Examples
 
 Create table:
 

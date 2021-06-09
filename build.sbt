@@ -29,12 +29,14 @@ lazy val commonSettings = Seq(
 lazy val dependencies = Seq(
   libraryDependencies ++= Seq(
     "dev.zio"                 %% "zio"                 % "1.0.5",
-    "io.d11"                  %% "zhttp"               % "1.0.0.0-RC16",
-    "io.getquill"             %% "quill-cassandra-zio" % "3.7.0",
-    "com.github.jwt-scala"    %% "jwt-json4s-native"   % "7.1.5",
     "dev.zio"                 %% "zio-json"            % "0.1.2",
     "dev.zio"                 %% "zio-logging-slf4j"   % "0.5.8",
     "dev.zio"                 %% "zio-logging"         % "0.5.8",
+    "dev.zio"                 %% "zio-macros"          % "1.0.5",
+    "io.d11"                  %% "zhttp"               % "1.0.0.0-RC16",
+    "io.getquill"             %% "quill-cassandra-zio" % "3.7.0",
+    "io.github.kitlangton"    %% "zio-magic"           % "0.3.2",
+    "com.github.jwt-scala"    %% "jwt-json4s-native"   % "7.1.5",
     "org.apache.logging.log4j" % "log4j-slf4j-impl"    % "2.14.1",
   ),
   libraryDependencies ++= Seq(

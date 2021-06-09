@@ -2,22 +2,18 @@ package com.topsy.kaiba.http
 
 import zhttp.http._
 import zio._
-import zio.logging._
 
-import com.topsy.kaiba.services.Health
+import com.topsy.kaiba.repositories.Health
 
 object HealthService {
   implicit val canFail: CanFail.type = CanFail
-  def routes: Http[Any, Nothing, Request, UResponse] =
-    Http.collect[Request] {
+  def routes: Http[Has[Health], Nothing, Request, UResponse] =
+    Http.collectM[Request] {
       case Method.GET -> Root / "health" =>
-        Health
-          .ok
-          .fold(
-            (failure: Throwable) => ZIO.succeed(log.error(s"Server down up due to: ${failure.getMessage}")),
-            (success: String) => ZIO.fail(log.info(s"Server is up $success")),
-          )
-          .retry(Schedule.recurs(5))
-        Response.jsonString("Server is up")
+        for {
+          health <- Health
+            .ok.map((success: String) => success)
+          // .retry(Schedule.recurs(5)) TODO: Tentative, define if needed
+        } yield Response.jsonString(health)
     }
 }

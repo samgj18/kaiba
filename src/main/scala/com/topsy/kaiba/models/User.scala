@@ -1,3 +1,13 @@
 package com.topsy.kaiba.models
 
-final case class User(name: String, email: String)
+import zio.json._
+
+final case class User(
+    id: String,
+    name: String,
+    email: String,
+  )
+
+object User {
+  implicit val encoder: JsonEncoder[User] = DeriveJsonEncoder.gen[User]
+}

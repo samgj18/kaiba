@@ -1,12 +1,25 @@
 package com.topsy.kaiba
 
+import com.topsy.kaiba.config.Database
+import com.topsy.kaiba.repositories._
 import zhttp.service._
 import zio._
+import zio.magic._
 
 object Main extends App {
-  override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] =
+  val deps: URLayer[ZEnv, Has[Health] with Has[Authentication]] =
+    ZLayer
+      .fromSomeMagic[ZEnv, Has[Health] with Has[Authentication]](
+        HealthLive.layer,
+        AuthenticationLive.layer,
+        QueriesLive.layer,
+        Database.layer,
+      )
+      .orDie
+
+  override def run(args: List[String]): URIO[ZEnv, ExitCode] =
     Server
       .start(port, routes)
-      .provideSomeLayer(live.appLayer)
-      .orDie
+      .exitCode
+      .provideCustomLayer(deps)
 }
