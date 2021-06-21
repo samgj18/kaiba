@@ -1,5 +1,27 @@
 # Topsy Auth
 
+| Project Stage | CI |
+| --- | --- |
+| ![Project stage][Stage] | ![CI][badge-ci] |
+
+## Current status: pre-0.1 (no release yet)
+
+### Progress report towards 0.1
+
+:x: - not usable
+
+:white_check_mark: - more work needed
+
+
+#### General features:
+Feature | Progress
+:------------ | :-------------
+Type-safe schema | :heavy_check_mark:
+Running Reads | :x:
+Running Deletes | :x:
+Running Updates | :x:
+Running Inserts | :x:
+
 ## Cassandra setup
 
 Use docker-compose to spin up Cassandra and use the following to log into the Cassandra node
@@ -65,3 +87,6 @@ UPDATE video
 SET url = 'https://www.youtube.com/watch?v=6A1SA5Be9qw&t=5182s'
 WHERE video_id = 'first_video_id';
 ```
+
+[badge-ci]: https://github.com/samgj18/kaiba/workflows/CI/badge.svg
+[Stage]: https://img.shields.io/badge/Project%20Stage-Experimental-yellow.svg
