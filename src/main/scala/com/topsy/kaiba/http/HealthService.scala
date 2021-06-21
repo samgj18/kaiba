@@ -12,7 +12,8 @@ object HealthService {
       case Method.GET -> Root / "health" =>
         for {
           health <- Health
-            .ok.map((success: String) => success)
+                      .ok
+                      .map((success: String) => success)
           // .retry(Schedule.recurs(5)) TODO: Tentative, define if needed
         } yield Response.jsonString(health)
     }

@@ -1,10 +1,11 @@
 package com.topsy.kaiba
 
-import com.topsy.kaiba.config.Database
-import com.topsy.kaiba.repositories._
 import zhttp.service._
 import zio._
 import zio.magic._
+
+import com.topsy.kaiba.config.Database
+import com.topsy.kaiba.repositories._
 
 object Main extends App {
   val deps: URLayer[ZEnv, Has[Health] with Has[Authentication]] =

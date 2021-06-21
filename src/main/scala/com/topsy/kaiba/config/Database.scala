@@ -1,8 +1,8 @@
 package com.topsy.kaiba.config
 
 import io.getquill._
+import zio._
 import zio.blocking.Blocking
-import zio.{ Has, RLayer }
 
 object Database {
   object ZioCassandraContext extends CassandraZioContext(Literal)

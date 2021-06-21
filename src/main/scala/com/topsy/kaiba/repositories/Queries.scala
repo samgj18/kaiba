@@ -1,11 +1,12 @@
 package com.topsy.kaiba.repositories
 
-import com.topsy.kaiba.config.Database.ZioCassandraContext._
-import com.topsy.kaiba.models.User
 import io.getquill.CassandraZioContext._
 import io.getquill.CassandraZioSession
 import zio._
 import zio.blocking.Blocking
+
+import com.topsy.kaiba.config.Database.ZioCassandraContext._
+import com.topsy.kaiba.models.User
 
 trait Queries {
   def getUserQuery(id: String): Task[List[User]]

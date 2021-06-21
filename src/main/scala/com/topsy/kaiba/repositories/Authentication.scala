@@ -1,8 +1,9 @@
 package com.topsy.kaiba.repositories
 
-import com.topsy.kaiba.models.User
 import pdi.jwt.JwtClaim
 import zio._
+
+import com.topsy.kaiba.models.User
 
 trait Authentication {
   def getUser(token: JwtClaim): Task[List[User]]

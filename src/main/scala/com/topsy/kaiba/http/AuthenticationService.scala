@@ -2,21 +2,29 @@ package com.topsy.kaiba.http
 
 import pdi.jwt.JwtClaim
 import zhttp.http._
+import zio._
 import zio.json._
-import com.topsy.kaiba.models.User
+import com.topsy.kaiba.models.{ Credential, User }
 import com.topsy.kaiba.repositories.Authentication
 import com.topsy.kaiba.repositories.Authentication.getUser
 import com.topsy.kaiba.utils.jwt.Tokenizer._
-import zio._
 
 object AuthenticationService {
   def routes: Http[Has[Authentication], Throwable, Request, Response[Has[Authentication], Throwable]] =
     login +++ authenticate(HttpApp.forbidden("error.forbidden.request"), user)
 
   def login: UHttpApp = Http.collect[Request] {
-    case Method.GET -> Root / "login" / username / password =>
-      if (password.reverse == username) Response.text(jwtEncode(new User("fakeId", username, email = "dummy@dummy.co")))
-      else Response.fromHttpError(HttpError.Unauthorized("error.invalid.credentials"))
+    case self @ Method.POST -> Root / "login" =>
+      self.getBodyAsString match {
+        case Some(credentials) =>
+          credentials.fromJson[Credential] match {
+            case Right(credentials) =>
+              Response.text(jwtEncode(new User("fakeId", credentials.username, email = credentials.email)))
+            case Left(error) => Response.fromHttpError(HttpError.Unauthorized(error))
+          }
+
+        case _ => Response.fromHttpError(HttpError.Unauthorized("error.invalid.credentials"))
+      }
   }
 
   def authenticate[R, E](fail: HttpApp[R, E], success: JwtClaim => HttpApp[R, E]): Http[R, E, Request, Response[R, E]] =
@@ -33,8 +41,8 @@ object AuthenticationService {
     Http.collectM[Request] {
       case Method.GET -> Root / "user" =>
         getUser(claim).map {
-          case one :: Nil => Response.jsonString(one.toJson)
-          case _          => Response.HttpResponse(Status.NOT_FOUND, Nil, HttpData.Empty)
+          case user :: Nil => Response.jsonString(user.toJson)
+          case _           => Response.fromHttpError(HttpError.Unauthorized("error.user.not.found"))
         }
     }
 }

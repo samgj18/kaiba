@@ -34,46 +34,34 @@ CREATE TABLE IF NOT EXISTS topsy_auth.user (
 
 Create table:
 
-```cqlsh
-CREATE TABLE IF NOT EXISTS topsy_auth.user (
-    last_name text,
-    first_name text,
-    middle_initial text,
+```cql
+CREATE TABLE IF NOT EXISTS topsy_auth.video (
+    video_id text,
     title text,
-    PRIMARY KEY ((last_name), first_name)
+    url text,
+    PRIMARY KEY ((title), video_id)
 );
 ```
 
 Insert data:
 
-```cqlsh
+```cql
 USE topsy_auth;
 
-INSERT INTO user (first_name, last_name)
-VALUES           ('Mary'    , 'Rodriguez');
+INSERT INTO video (video_id			, title						, url)
+VALUES            ('first_video_id'   , 'Zymposium - Full Stack Development', 'https://www.youtube.com/watch?v=VqTqFhU9Mrs');
 
-INSERT INTO user (first_name, last_name, title)
-VALUES           ('Wanda'   , 'Nguyen' , 'Mrs.');
+INSERT INTO video (video_id, title)
+VALUES            (now() 	, 'Zymposium - ZIO Schema');
 
-INSERT INTO user (first_name, middle_initial, last_name, title)
-VALUES           ('Bill'    , 'S'           , 'Nguyen' , 'Mr.');
-
-// Causes upserts
-INSERT INTO user (first_name, middle_initial, last_name, title)
-VALUES           ('Bill'    , 'R'           , 'Nguyen' , 'Mr.');
-```
-
-Inserts will also cause upserts:
-```cqlsh
-INSERT into user (first_name, last_name, title)
-VALUES              ('Mary', 'Rodriguez',  'Mrs.');
+// Inserts will also cause upsert
+INSERT INTO video (video_id			, title				, url)
+VALUES           ('first_video_id'    , 'ZIO WORLD - ZScheduler' , 'https://www.youtube.com/watch?v=GaWcmRHS-qI');
 ```
 
 You can also use updates:
-```cqlsh
-UPDATE user
-SET middle_initial = 'Q'
-WHERE
-  first_name = 'Mary' AND
-  last_name = 'Rodriguez';
+```cql
+UPDATE video
+SET url = 'https://www.youtube.com/watch?v=6A1SA5Be9qw&t=5182s'
+WHERE video_id = 'first_video_id';
 ```

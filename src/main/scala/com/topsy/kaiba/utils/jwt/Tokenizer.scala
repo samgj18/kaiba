@@ -15,8 +15,12 @@ object Tokenizer {
     * @return
     */
   def jwtEncode(user: User): String = {
-    val json  = user.id
-    val claim = JwtClaim(json).issuedNow.expiresIn(3600)
+    val claim = JwtClaim().issuedNow
+      .expiresIn(3600)
+      .+("id", user.id)
+      .+("name", user.name)
+      .+("email", user.email)
+    // claim + ("user", user.id)
     Jwt.encode(claim, SECRET_KEY, JwtAlgorithm.HS512)
   }
 

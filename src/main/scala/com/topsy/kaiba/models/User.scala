@@ -10,4 +10,5 @@ final case class User(
 
 object User {
   implicit val encoder: JsonEncoder[User] = DeriveJsonEncoder.gen[User]
+  implicit val decoder: JsonDecoder[User] = DeriveJsonDecoder.gen[User]
 }

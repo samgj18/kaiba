@@ -11,9 +11,8 @@ final case class HealthLive() extends Health {
 }
 
 object HealthLive {
-  val layer: ULayer[Has[Health]] = {
+  val layer: ULayer[Has[Health]] =
     ZLayer.succeed(HealthLive())
-  }
 }
 
 object Health {
